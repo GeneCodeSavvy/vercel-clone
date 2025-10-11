@@ -25,7 +25,7 @@ const s3Client = new S3Client({
     },
 });
 
-const DYNAMIC_DEPLOYMENT_REGEX = /^https?:\/\/(.+\.)?vercel\.harsh-dev\.xyz(:\d+)?$/;
+const DYNAMIC_DEPLOYMENT_REGEX = /^https?:\/\/(.+\.)?vercel\.harsh-dev\.xyz/;
 const DYNAMIC_LOCALHOST_REGEX = /^https?:\/\/(.+\.)?localhost(:\d+)?$/;
 app.use(
     cors({
