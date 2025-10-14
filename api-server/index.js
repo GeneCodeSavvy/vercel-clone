@@ -101,7 +101,7 @@ app.post('/project', async (req, res) => {
             "status": status,
             "data": {
                 project_id,
-                url: `https://${project_id}.${SUB_DOMAIN_URL}`,
+                url: `https://${project_id}.${SUB_DOMAIN_URL.split("//")[1]}`,
                 wss_channel: `logs:${project_id}`
             }
         })
