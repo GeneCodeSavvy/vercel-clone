@@ -14,7 +14,7 @@ function App() {
     const logsRef = useRef(null);
 
     if (!ws) {
-        const socket = new WebSocket('ws://localhost:9000');
+        const socket = new WebSocket('wss://api.vercel.harsh-dev.xyz');
         socket.onopen = () => {
             console.log('WebSocket established');
         };
@@ -36,6 +36,9 @@ function App() {
     useEffect(() => {
         if (logsRef.current) {
             logsRef.current.scrollTop = logsRef.current.scrollHeight;
+        }
+        if (logs[-1] == 'Done') {
+            setStatus(() => 'The project is hosted')
         }
     }, [logs]);
 
