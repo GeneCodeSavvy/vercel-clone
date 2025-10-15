@@ -11,10 +11,10 @@ function App() {
     const [status, setStatus] = useState('');
     const [copySuccess, setCopySuccess] = useState('');
     const [projectUrl, setProjectURL] = useState('');
-    const [logs, setLogs] = useState([]);
-    const [ws, setWs] = useState(null)
+    const [logs, setLogs] = useState<string[]>([]);
+    const [ws, setWs] = useState<WebSocket | null>(null);
 
-    const logsRef = useRef(null);
+    const logsRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const socket = new WebSocket('wss://api.vercel.harsh-dev.xyz');
@@ -28,29 +28,29 @@ function App() {
             }
         };
         socket.onerror = (err) => {
-            setStatus(`WebSocket error: ${err}`)
+            setStatus(`WebSocket error: ${err}`);
             console.error('WebSocket error:', err);
         };
         socket.onclose = () => {
             setStatus('WebSocket disconnected');
-            setWs(null)
+            setWs(null);
         };
-        setWs(socket)
+        setWs(socket);
         return () => {
             socket.close();
         };
-    }, [])
+    }, []);
 
     useEffect(() => {
         if (logsRef.current) {
             logsRef.current.scrollTop = logsRef.current.scrollHeight;
         }
-        if (logs[logs.length - 1] == 'Done') {
-            setStatus(() => 'The project is hosted')
+        if (logs[logs.length - 1] === 'Done') {
+            setStatus('The project is hosted');
         }
     }, [logs]);
 
-    const copyToClipboard = async (text) => {
+    const copyToClipboard = async (text: string) => {
         try {
             await navigator.clipboard.writeText(text);
             setCopySuccess('Copied!');
@@ -62,7 +62,7 @@ function App() {
         }
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!gitUrl.trim()) return;
 
@@ -183,8 +183,8 @@ function App() {
                         overflowY: 'auto'
                     }}
                 >
-                    {logs.map((log, key) => (
-                        <p className='logs' key={key} >{log}</p>
+                    {logs.map((log, index) => (
+                        <p className='logs' key={`${log}-${index}`} >{log}</p>
                     ))}
                 </div>
             </div>
