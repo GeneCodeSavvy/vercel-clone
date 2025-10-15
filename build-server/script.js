@@ -59,7 +59,7 @@ async function init() {
     p.on('close', async function() {
         console.log('Build Complete')
         publishLog(`Build Complete`)
-        const distFolderPath = path.join(__dirname, ROOT_DIR, BUILD_DIR)
+        const distFolderPath = path.join(rootDirPath, BUILD_DIR)
         const distFolderContents = fs.readdirSync(distFolderPath, { recursive: true })
 
         publishLog(`Starting to upload`)
