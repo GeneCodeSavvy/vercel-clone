@@ -48,7 +48,7 @@ app.use(cors(corsOptions))
 
 app.post('/project', async (req, res) => {
     try {
-        const { gitURL } = req.body;
+        const { gitURL, buildDir, rootDir, buildCommand } = req.body;
 
         if (!gitURL) {
             return res.status(400).json({ error: "gitURL is required" });
@@ -82,6 +82,18 @@ app.post('/project', async (req, res) => {
                             name: "PROJECT_ID",
                             value: project_id,
                         },
+                        {
+                            name: "BUILD_DIR",
+                            value: buildDir,
+                        },
+                        {
+                            name: "ROOT_DIR",
+                            value: rootDir,
+                        },
+                        {
+                            name: "BUILD_COMMAND",
+                            value: buildCommand,
+                        },
                     ],
                 }]
             }
@@ -98,12 +110,9 @@ app.post('/project', async (req, res) => {
         }
 
         res.json({
-            "status": status,
-            "data": {
-                project_id,
-                url: `https://${project_id}.${SUB_DOMAIN_URL.split("//")[1]}`,
-                wss_channel: `logs:${project_id}`
-            }
+            status: status,
+            url: `https://${project_id}.${SUB_DOMAIN_URL.split("//")[1]}`,
+            wss_channel: `logs:${project_id}`
         })
     } catch (error) {
         console.error('Error creating project:', error);

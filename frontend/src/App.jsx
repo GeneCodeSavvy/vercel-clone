@@ -4,16 +4,20 @@ import './App.css';
 
 function App() {
     const [gitUrl, setGitUrl] = useState('');
+    const [buildDir, setBuildDir] = useState('');
+    const [rootDir, setRootDir] = useState('');
+    const [buildCommand, setBuildCommand] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [status, setStatus] = useState('');
     const [copySuccess, setCopySuccess] = useState('');
     const [projectUrl, setProjectURL] = useState('');
-    const [ws, setWs] = useState(null);
     const [logs, setLogs] = useState([]);
+    const [ws, setWs] = useState(null)
+    const [wssChannel, setWssChannel] = useState('');
 
     const logsRef = useRef(null);
 
-    if (!ws) {
+    useEffect(() => {
         const socket = new WebSocket('wss://api.vercel.harsh-dev.xyz');
         socket.onopen = () => {
             console.log('WebSocket established');
@@ -25,19 +29,24 @@ function App() {
             }
         };
         socket.onerror = (err) => {
+            setStatus(`WebSocket error: ${err}`)
             console.error('WebSocket error:', err);
         };
         socket.onclose = () => {
-            setStatus((s) => s || 'WebSocket disconnected');
+            setStatus('WebSocket disconnected');
+            setWs(null)
         };
-        setWs(socket);
-    }
+        setWs(socket)
+        return () => {
+            socket.close();
+        };
+    }, [])
 
     useEffect(() => {
         if (logsRef.current) {
             logsRef.current.scrollTop = logsRef.current.scrollHeight;
         }
-        if (logs[-1] == 'Done') {
+        if (logs[logs.length - 1] == 'Done') {
             setStatus(() => 'The project is hosted')
         }
     }, [logs]);
@@ -71,19 +80,21 @@ function App() {
 
         try {
             const response = await axios.post(`https://api.vercel.harsh-dev.xyz/project`, {
-                gitURL: repositoryUrl
+                gitURL: repositoryUrl,
+                buildDir: buildDir,
+                rootDir: rootDir,
+                buildCommand: buildCommand
             });
 
             if (response.data.status === 'queued') {
                 setStatus('Project queued! Waiting for build to complete...');
-                setProjectURL(response.data.data.url);
-                const projectId = response.data.data.project_id;
-                const wssChannel = response.data.data.wss_channel;
+                setProjectURL(response.data.url);
+                setWssChannel(response.data.wss_channel)
 
                 if (ws && ws.readyState === WebSocket.OPEN) {
-                    ws.send(wssChannel || `logs:${projectId}`);
+                    ws.send(wssChannel);
                 } else if (ws) {
-                    ws.addEventListener('open', () => ws.send(wssChannel || `logs:${projectId}`), { once: true });
+                    ws.addEventListener('open', () => ws.send(wssChannel), { once: true });
                 }
             }
         } catch (error) {
@@ -107,6 +118,30 @@ function App() {
                         value={gitUrl}
                         onChange={(e) => setGitUrl(e.target.value)}
                         placeholder="Eg. username/repo or https://github.com/username/repo"
+                        className="input"
+                        disabled={isLoading}
+                    />
+                    <input
+                        type="text"
+                        value={rootDir}
+                        onChange={(e) => setRootDir(e.target.value)}
+                        placeholder="Leave blank if frontend code is not in a seperate directory"
+                        className="input"
+                        disabled={isLoading}
+                    />
+                    <input
+                        type="text"
+                        value={buildDir}
+                        onChange={(e) => setBuildDir(e.target.value)}
+                        placeholder="Leave blank if build is compiled and saved to 'build' directory"
+                        className="input"
+                        disabled={isLoading}
+                    />
+                    <input
+                        type="text"
+                        value={buildCommand}
+                        onChange={(e) => setBuildCommand(e.target.value)}
+                        placeholder="Leave blank if build command is 'npm run build'"
                         className="input"
                         disabled={isLoading}
                     />
@@ -135,7 +170,7 @@ function App() {
             }}>
                 <h3 style={{ margin: 0, }}>Live build logs</h3>
                 <div
-                    ref={logsRef} // Attach the ref here
+                    ref={logsRef}
                     style={{
                         background: 'var(--glass)',
                         border: '1px solid var(--ring)',
@@ -144,8 +179,8 @@ function App() {
                         backdropFilter: 'blur(8px)',
                         marginTop: '10px',
                         width: '100%',
-                        height: '200px', // Fixed height to enable scrolling
-                        overflowY: 'auto' // Make it scrollable
+                        height: '200px',
+                        overflowY: 'auto'
                     }}
                 >
                     {logs.map((log, key) => (
@@ -155,10 +190,10 @@ function App() {
             </div>
 
             {
-                projectUrl && (
+                projectUrl && status === "The project is hosted" && (
                     <div className="url-container">
                         <div className="url-display">
-                            <span className="url-label">Your project will be at :</span>
+                            <span className="url-label">Your project is at :</span>
                             <div className="url-input-group">
                                 <input
                                     type="text"

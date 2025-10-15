@@ -13,6 +13,9 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const PROJECT_ID = process.env.PROJECT_ID
+const BUILD_DIR = process.env.BUILD_DIR || 'build'
+const ROOT_DIR = process.env.ROOT_DIR || '.'
+const BUILD_COMMAND = process.env.BUILD_COMMAND || 'npm run build'
 
 let publisher
 let s3Client
@@ -39,8 +42,9 @@ async function init() {
     console.log('Executing script.js')
     publishLog('Build Started...')
     const outDirPath = path.join(__dirname, 'output')
+    const rootDirPath = ROOT_DIR ? path.join(outDirPath, ROOT_DIR) : outDirPath
 
-    const p = exec(`cd ${outDirPath} && npm install && npm run build`)
+    const p = exec(`cd ${rootDirPath} && npm install && ${BUILD_COMMAND}`)
 
     p.stdout.on('data', function(data) {
         console.log(data.toString())
@@ -55,7 +59,7 @@ async function init() {
     p.on('close', async function() {
         console.log('Build Complete')
         publishLog(`Build Complete`)
-        const distFolderPath = path.join(__dirname, 'output', 'dist')
+        const distFolderPath = path.join(__dirname, ROOT_DIR, BUILD_DIR)
         const distFolderContents = fs.readdirSync(distFolderPath, { recursive: true })
 
         publishLog(`Starting to upload`)
