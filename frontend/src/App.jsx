@@ -68,7 +68,8 @@ function App() {
 
         setIsLoading(true);
         setStatus('Creating project...');
-        if (logs) { setLogs([]) }
+        if (logs) { setLogs([]) };
+        setProjectURL('');
 
         let repositoryUrl = gitUrl.trim();
         if (!repositoryUrl.startsWith('http') && !repositoryUrl.includes('/')) {
