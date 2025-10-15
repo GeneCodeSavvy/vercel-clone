@@ -135,7 +135,7 @@ const init = async () => {
 
                     const existingChannel = redisChannels.get(socket)
                     if (existingChannel) {
-                        socket.send(`Unsubscribing from channel : ${existingChannel}`)
+                        socket.send(JSON.stringify({ status: 'unsubscribed', channel: existingChannel }));
                         await subscriber.unsubscribe(existingChannel)
                     }
 
