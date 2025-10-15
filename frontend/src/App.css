@@ -61,7 +61,7 @@ body {
 }
 
 .main-container {
-    padding-top: 15vh;
+    padding-top: 12vh;
     display: flex;
     width: 100%;
     max-width: 1200px;
@@ -184,11 +184,12 @@ body {
     width: 100%;
     overflow: auto;
     height: auto;
+    max-height: 80vh;
     padding: 24px;
 }
 
 .logs-container h3 {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 500;
     margin-bottom: 16px;
     color: var(--text);
