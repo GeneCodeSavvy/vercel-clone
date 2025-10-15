@@ -182,7 +182,6 @@ function App() {
                     {projectUrl && status === "The project is hosted" && (
                         <div className="url-container">
                             <div className="url-display">
-                                <span className="url-label">Your project is at :</span>
                                 <div className="url-input-group">
                                     <input
                                         type="text"
