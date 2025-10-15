@@ -87,7 +87,7 @@ function App() {
             });
 
             if (response.data.status === 'queued') {
-                setStatus('Project queued! Waiting for build to complete...');
+                setStatus('Project queued! Provisioning Compute to Build...');
                 setProjectURL(response.data.url);
                 const newChannel = response.data.wss_channel;
 
