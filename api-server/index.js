@@ -133,8 +133,10 @@ const init = async () => {
                     const channel = data.toString();
                     console.log(`Subscribing to channel: ${channel}`);
 
-                    if (redisChannels.has(socket)) {
-                        return socket.send(JSON.stringify({ error: "Channel already in use" }));
+                    const existingChannel = redisChannels.get(socket)
+                    if (existingChannel) {
+                        socket.send(`Unscribing from channel : ${existingChannel}`)
+                        await subscriber.unsubscribe(existingChannel)
                     }
 
                     redisChannels.set(socket, channel);

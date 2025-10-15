@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const PROJECT_ID = process.env.PROJECT_ID
-const BUILD_DIR = process.env.BUILD_DIR || 'build'
+const BUILD_DIR = process.env.BUILD_DIR || 'dist'
 const ROOT_DIR = process.env.ROOT_DIR || '.'
 const BUILD_COMMAND = process.env.BUILD_COMMAND || 'npm run build'
 

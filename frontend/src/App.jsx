@@ -13,7 +13,6 @@ function App() {
     const [projectUrl, setProjectURL] = useState('');
     const [logs, setLogs] = useState([]);
     const [ws, setWs] = useState(null)
-    const [wssChannel, setWssChannel] = useState('');
 
     const logsRef = useRef(null);
 
@@ -89,12 +88,12 @@ function App() {
             if (response.data.status === 'queued') {
                 setStatus('Project queued! Waiting for build to complete...');
                 setProjectURL(response.data.url);
-                setWssChannel(response.data.wss_channel)
+                const newChannel = response.data.wss_channel;
 
                 if (ws && ws.readyState === WebSocket.OPEN) {
-                    ws.send(wssChannel);
+                    ws.send(newChannel);
                 } else if (ws) {
-                    ws.addEventListener('open', () => ws.send(wssChannel), { once: true });
+                    ws.addEventListener('open', () => ws.send(newChannel), { once: true });
                 }
             }
         } catch (error) {
