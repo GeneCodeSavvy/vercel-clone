@@ -111,84 +111,108 @@ function App() {
                 <h1 style={{ color: 'white', fontSize: '25px' }}>Vercel by <a style={{ textDecoration: 'none' }} href="https://x.com/intent/follow?screen_name=harsh_twtt" target='_blank' rel='noopener'>@harsh_twtt</a></h1>
             </div>
 
-            <div className="form-container">
-                <form onSubmit={handleSubmit} className="form">
-                    <input
-                        type="text"
-                        value={gitUrl}
-                        onChange={(e) => setGitUrl(e.target.value)}
-                        placeholder="Eg. username/repo or https://github.com/username/repo"
-                        className="input"
-                        disabled={isLoading}
-                    />
-                    <input
-                        type="text"
-                        value={rootDir}
-                        onChange={(e) => setRootDir(e.target.value)}
-                        placeholder="Leave blank if frontend code is not in a seperate directory"
-                        className="input"
-                        disabled={isLoading}
-                    />
-                    <input
-                        type="text"
-                        value={buildDir}
-                        onChange={(e) => setBuildDir(e.target.value)}
-                        placeholder="Leave blank if build is compiled and saved to 'build' directory"
-                        className="input"
-                        disabled={isLoading}
-                    />
-                    <input
-                        type="text"
-                        value={buildCommand}
-                        onChange={(e) => setBuildCommand(e.target.value)}
-                        placeholder="Leave blank if build command is 'npm run build'"
-                        className="input"
-                        disabled={isLoading}
-                    />
-                    <button
-                        type="submit"
-                        className="submit-button"
-                        disabled={isLoading || !gitUrl.trim()}
+            <div className="main-container">
+
+                <div className='form-content-container'>
+
+                    <div className="form-container">
+
+                        <h2 id="github-form-heading">Enter your GitHub repository details</h2>
+                        <form onSubmit={handleSubmit} className="form" >
+                            <div className='input-container'>
+                                <label htmlFor="git-url">Enter repo URL</label>
+                                <input
+                                    id='git-url'
+                                    type="text"
+                                    value={gitUrl}
+                                    onChange={(e) => setGitUrl(e.target.value)}
+                                    placeholder="Enter git URL"
+                                    className="input  "
+                                    disabled={isLoading}
+                                />
+                                <span>Eg. username/repo or https://github.com/username/repo</span>
+                            </div>
+
+                            <div className='input-container'>
+                                <label htmlFor="frontend-inp">Frontend Directory (Optional)</label>
+                                <input
+                                    id='frontend-inp'
+                                    type="text"
+                                    value={rootDir}
+                                    onChange={(e) => setRootDir(e.target.value)}
+                                    placeholder=""
+                                    className="input"
+                                    disabled={isLoading}
+                                />
+                                <span>Enter frontend folder path</span>
+                            </div>
+
+                            <div className='input-container'>
+                                <label htmlFor="git-url">Build Directory (Optional)</label>
+                                <input
+                                    type="text"
+                                    value={buildDir}
+                                    onChange={(e) => setBuildDir(e.target.value)}
+                                    placeholder=""
+                                    className="input"
+                                    disabled={isLoading}
+                                />
+                                <span>Enter build folder path</span>
+                            </div>
+                            <div className='input-container'>
+                                <label htmlFor="git-url">Build command</label>
+                                <input
+                                    type="text"
+                                    value={buildCommand}
+                                    onChange={(e) => setBuildCommand(e.target.value)}
+                                    placeholder=""
+                                    className="input"
+                                    disabled={isLoading}
+                                />
+                                <span>Enter build command</span>
+                            </div>
+                            <button
+                                type="submit"
+                                className="submit-button"
+                                disabled={isLoading || !gitUrl.trim()}
+                            >
+                                Deploy →
+                            </button>
+                        </form>
+                    </div>
+
+                    <table className='table'>
+                        <tr>
+                            <th>Status</th>
+                            <th>{status}</th>
+                        </tr>
+                        <tr>
+                            <th>Project URL</th>
+                            <th>{projectUrl}</th>
+                        </tr>
+                    </table>
+                </div>
+                <div className="logs-container" style={{
+                    background: 'var(--glass)',
+                    border: '1px solid var(--ring)',
+                    borderRadius: '12px',
+                    backdropFilter: 'blur(8px)',
+                    width: '100%',
+                    overflowY: 'auto'
+                }}>
+                    <h3 style={{ margin: 0, }}>Live build logs</h3>
+                    <div
+                        ref={logsRef}
+                        style={{
+                        }}
                     >
-                        →
-                    </button>
-                </form>
-                <p className="instruction">Enter your GitHub repository URL or username/repo</p>
-            </div>
-
-            {status && (
-                <div className="status">
-                    {status}
+                        {logs.map((log, index) => (
+                            <p className='logs' key={`${log}-${index}`} >{log}</p>
+                        ))}
+                    </div>
                 </div>
-            )}
 
-            <div className="logs-container" style={{
-                marginTop: 16,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "start"
-            }}>
-                <h3 style={{ margin: 0, }}>Live build logs</h3>
-                <div
-                    ref={logsRef}
-                    style={{
-                        background: 'var(--glass)',
-                        border: '1px solid var(--ring)',
-                        padding: '8px',
-                        borderRadius: '12px',
-                        backdropFilter: 'blur(8px)',
-                        marginTop: '10px',
-                        width: '100%',
-                        height: '200px',
-                        overflowY: 'auto'
-                    }}
-                >
-                    {logs.map((log, index) => (
-                        <p className='logs' key={`${log}-${index}`} >{log}</p>
-                    ))}
-                </div>
             </div>
-
             {
                 projectUrl && status === "The project is hosted" && (
                     <div className="url-container">

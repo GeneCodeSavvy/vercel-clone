@@ -56,9 +56,24 @@ body {
     color: var(--muted);
 }
 
+.main-container {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    min-height: 95dvh;
+}
+
+.form-content-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: stretch;
+}
+
 .form-container {
     width: 100%;
-    max-width: 560px;
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -67,10 +82,10 @@ body {
 
 .form {
     width: 100%;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 8px;
+    display: flex;
+    gap: 30px;
     background: var(--glass);
+    flex-direction: column;
     border: 1px solid var(--ring);
     padding: 8px;
     border-radius: 12px;
@@ -79,24 +94,42 @@ body {
 
 .input {
     background: transparent;
-    border: none;
+    border: 1px solid var(--ring);
     outline: none;
-    color: var(--text);
+    color: var(--muted);
     padding: 12px 14px;
     font-size: 14px;
+    border-radius: 8px;
+
 }
 
 .input::placeholder {
     color: var(--muted);
 }
 
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.input-container span {
+    font-size: 10px;
+    color: var(--muted);
+}
+
+.input-container label {
+    font-size: 12px;
+}
+
 .submit-button {
-    width: 40px;
+    width: 100%;
     height: 40px;
     border-radius: 10px;
     border: 1px solid var(--ring);
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--primary);
+    background: white;
+    z-index: 9999;
+    color: black;
     cursor: pointer;
     transition: transform .12s ease, background .2s ease, border-color .2s ease;
 }
@@ -125,12 +158,14 @@ body {
 
 .logs-container {
     width: 100%;
-    max-width: 720px;
     overflow: auto;
+    height: auto;
+    border: 1px solid #ffffff;
+    padding: 12px;
 }
 
 .logs {
-    color: rgba(255,255,255,0.55) ;
+    color: rgba(255, 255, 255, 0.55);
 }
 
 .logs:last-child {
