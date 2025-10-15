@@ -120,7 +120,7 @@ function App() {
                         <h2 id="github-form-heading">Enter your GitHub repository details</h2>
                         <form onSubmit={handleSubmit} className="form" >
                             <div className='input-container'>
-                                <label htmlFor="git-url">Enter repo URL</label>
+                                <label htmlFor="git-url">Github Public Repo</label>
                                 <input
                                     id='git-url'
                                     type="text"
@@ -130,34 +130,31 @@ function App() {
                                     className="input  "
                                     disabled={isLoading}
                                 />
-                                <span>Eg. username/repo or https://github.com/username/repo</span>
                             </div>
 
                             <div className='input-container'>
-                                <label htmlFor="frontend-inp">Frontend Directory (Optional)</label>
+                                <label htmlFor="frontend-inp">Frontend Directory</label>
                                 <input
                                     id='frontend-inp'
                                     type="text"
                                     value={rootDir}
                                     onChange={(e) => setRootDir(e.target.value)}
-                                    placeholder=""
+                                    placeholder="Optional, defaults to project root"
                                     className="input"
                                     disabled={isLoading}
                                 />
-                                <span>Enter frontend folder path</span>
                             </div>
 
                             <div className='input-container'>
-                                <label htmlFor="git-url">Build Directory (Optional)</label>
+                                <label htmlFor="git-url">Build Directory </label>
                                 <input
                                     type="text"
                                     value={buildDir}
                                     onChange={(e) => setBuildDir(e.target.value)}
-                                    placeholder=""
+                                    placeholder="Optional, defaults to 'dist'"
                                     className="input"
                                     disabled={isLoading}
                                 />
-                                <span>Enter build folder path</span>
                             </div>
                             <div className='input-container'>
                                 <label htmlFor="git-url">Build command</label>
@@ -165,11 +162,10 @@ function App() {
                                     type="text"
                                     value={buildCommand}
                                     onChange={(e) => setBuildCommand(e.target.value)}
-                                    placeholder=""
+                                    placeholder="Optional, defaults to 'npm run dev'"
                                     className="input"
                                     disabled={isLoading}
                                 />
-                                <span>Enter build command</span>
                             </div>
                             <button
                                 type="submit"
@@ -181,67 +177,47 @@ function App() {
                         </form>
                     </div>
 
-                    <table className='table'>
-                        <tr>
-                            <th>Status</th>
-                            <th>{status}</th>
-                        </tr>
-                        <tr>
-                            <th>Project URL</th>
-                            <th>{projectUrl}</th>
-                        </tr>
-                    </table>
+                    <h4 className='status'>{status}</h4>
+
+                    {projectUrl && status === "The project is hosted" && (
+                        <div className="url-container">
+                            <div className="url-display">
+                                <span className="url-label">Your project is at :</span>
+                                <div className="url-input-group">
+                                    <input
+                                        type="text"
+                                        value={projectUrl}
+                                        readOnly
+                                        className="url-input"
+                                    />
+                                    <button
+                                        onClick={() => copyToClipboard(projectUrl)}
+                                        className="copy-button"
+                                        type='button'
+                                    >
+                                        {copySuccess || 'Copy'}
+                                    </button>
+                                </div>
+                                {copySuccess && (
+                                    <div className="copy-feedback">
+                                        {copySuccess}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
-                <div className="logs-container" style={{
-                    background: 'var(--glass)',
-                    border: '1px solid var(--ring)',
-                    borderRadius: '12px',
-                    backdropFilter: 'blur(8px)',
-                    width: '100%',
-                    overflowY: 'auto'
-                }}>
-                    <h3 style={{ margin: 0, }}>Live build logs</h3>
+                <div className="logs-container" >
+                    <h3>Live build logs</h3>
                     <div
                         ref={logsRef}
-                        style={{
-                        }}
                     >
                         {logs.map((log, index) => (
                             <p className='logs' key={`${log}-${index}`} >{log}</p>
                         ))}
                     </div>
                 </div>
-
             </div>
-            {
-                projectUrl && status === "The project is hosted" && (
-                    <div className="url-container">
-                        <div className="url-display">
-                            <span className="url-label">Your project is at :</span>
-                            <div className="url-input-group">
-                                <input
-                                    type="text"
-                                    value={projectUrl}
-                                    readOnly
-                                    className="url-input"
-                                />
-                                <button
-                                    onClick={() => copyToClipboard(projectUrl)}
-                                    className="copy-button"
-                                    type='button'
-                                >
-                                    {copySuccess || 'Copy'}
-                                </button>
-                            </div>
-                            {copySuccess && (
-                                <div className="copy-feedback">
-                                    {copySuccess}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                )
-            }
         </div >
     )
 }

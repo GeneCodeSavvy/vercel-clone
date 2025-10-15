@@ -8,6 +8,7 @@
     --accent: #989aa8;
     --primary: #ffffff;
     --ring: rgba(255, 255, 255, 0.12);
+    --font-sans: 'Inter', sans-serif;
 }
 
 /* Background with soft organic blur like Vercel aesthetic */
@@ -28,6 +29,7 @@ body::after {
 body {
     background: #ffffff;
     background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(237, 237, 237, 1) 0%, rgba(0, 0, 0, 1) 100%);
+    font-family: var(--font-sans);
 }
 
 .app {
@@ -45,21 +47,25 @@ body {
 
 .header {
     position: fixed;
-    top: 16px;
-    left: 16px;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
     opacity: 0.85;
+    text-align: center;
 }
 
 .header h1 {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--muted);
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--primary);
 }
 
 .main-container {
+    padding-top: 15vh;
     display: flex;
     width: 100%;
-    gap: 20px;
+    max-width: 1200px;
+    gap: 40px;
     min-height: 95dvh;
 }
 
@@ -73,71 +79,82 @@ body {
 
 .form-container {
     width: 100%;
-
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
 }
 
 .form {
     width: 100%;
     display: flex;
-    gap: 30px;
+    gap: 20px;
     background: var(--glass);
     flex-direction: column;
     border: 1px solid var(--ring);
-    padding: 8px;
-    border-radius: 12px;
-    backdrop-filter: blur(8px);
+    padding: 24px;
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
 }
 
 .input {
     background: transparent;
     border: 1px solid var(--ring);
     outline: none;
-    color: var(--muted);
-    padding: 12px 14px;
-    font-size: 14px;
-    border-radius: 8px;
-
+    color: var(--text);
+    padding: 14px 16px;
+    font-size: 16px;
+    border-radius: 10px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
+
+.input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(152, 154, 168, 0.2);
+}
+
 
 .input::placeholder {
     color: var(--muted);
 }
 
 .input-container {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
 }
 
 .input-container span {
-    font-size: 10px;
+    font-size: 12px;
     color: var(--muted);
+    padding-left: 4px;
 }
 
 .input-container label {
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
 }
 
 .submit-button {
     width: 100%;
-    height: 40px;
+    height: 48px;
     border-radius: 10px;
     border: 1px solid var(--ring);
     background: white;
     z-index: 9999;
     color: black;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
     transition: transform .12s ease, background .2s ease, border-color .2s ease;
 }
 
 .submit-button:hover:not(:disabled) {
-    transform: translateX(1px);
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.22);
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
 }
 
 .submit-button:disabled {
@@ -146,26 +163,42 @@ body {
 }
 
 .instruction {
-    font-size: 12px;
+    font-size: 14px;
     color: var(--muted);
+    text-align: center;
 }
 
 .status {
-    margin-top: 18px;
-    font-size: 13px;
-    color: var(--accent);
+    margin-top: 3vh;
+    font-size: 16px;
+    color: var(--text);
+    text-align: center;
 }
 
 .logs-container {
+    background: var(--glass);
+    margin: 0;
+    border: 1px solid var(--ring);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
     width: 100%;
     overflow: auto;
     height: auto;
-    border: 1px solid #ffffff;
-    padding: 12px;
+    padding: 24px;
+}
+
+.logs-container h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: var(--text);
 }
 
 .logs {
-    color: rgba(255, 255, 255, 0.55);
+    color: var(--muted);
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    line-height: 1.6;
 }
 
 .logs:last-child {
@@ -177,6 +210,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
 }
 
 .url-display {
@@ -188,13 +222,14 @@ body {
 
 .url-label {
     color: var(--muted);
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .url-input-group {
     display: grid;
     grid-template-columns: 1fr auto;
-    gap: 8px;
+    gap: 12px;
 }
 
 .url-input {
@@ -202,25 +237,49 @@ body {
     border: 1px solid var(--ring);
     color: var(--text);
     border-radius: 10px;
-    padding: 10px 12px;
+    padding: 12px 14px;
+    font-size: 16px;
 }
 
 .copy-button {
     border-radius: 10px;
     border: 1px solid var(--ring);
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.1);
     color: var(--primary);
-    padding: 10px 12px;
+    padding: 10px 16px;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.copy-button:hover {
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .copy-feedback {
     font-size: 12px;
     color: var(--muted);
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        padding-top: 10vh;
+    }
+
+    .header {
+        top: 20px;
+    }
 }
 
 @media (max-width: 520px) {
     .form {
-        grid-template-columns: 1fr auto;
+        padding: 16px;
+    }
+
+    .header h1 {
+        font-size: 24px;
     }
 }
