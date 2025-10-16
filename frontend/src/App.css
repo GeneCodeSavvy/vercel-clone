@@ -312,6 +312,11 @@ body {
     .header {
         top: 20px;
     }
+
+    .logs-container {
+        flex: 1;
+        min-height: 300px;
+    }
 }
 
 @media (max-width: 520px) {
