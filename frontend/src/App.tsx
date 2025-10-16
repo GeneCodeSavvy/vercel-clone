@@ -193,16 +193,16 @@ function App() {
 
                     <h4 className='status'>{status}</h4>
 
-                    {projectUrl && status === "The project is hosted" && (
-                        <div className="url-container">
-                            <div className="url-display">
-                                <div className="url-input-group">
-                                    <input
-                                        type="text"
-                                        value={projectUrl}
-                                        readOnly
-                                        className="url-input"
-                                    />
+                    <div className="url-container">
+                        <div className="url-display">
+                            <div className="url-output-group">
+                                <input
+                                    type="text"
+                                    value={status === "The project is hosted" ? projectUrl : ''}
+                                    readOnly
+                                    className="url-output"
+                                />
+                                <div className='url-output-buttons'>
                                     <button
                                         onClick={() => copyToClipboard(projectUrl)}
                                         className="copy-button"
@@ -218,14 +218,14 @@ function App() {
                                         Visit
                                     </button>
                                 </div>
-                                {copySuccess && (
-                                    <div className="copy-feedback">
-                                        {copySuccess}
-                                    </div>
-                                )}
                             </div>
+                            {copySuccess && (
+                                <div className="copy-feedback">
+                                    {copySuccess}
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
                 </div>
                 <div className="logs-container" >
                     <h3>Live build logs</h3>
