@@ -46,10 +46,6 @@ body {
 }
 
 .header {
-    position: fixed;
-    top: 40px;
-    left: 50%;
-    transform: translateX(-50%);
     opacity: 0.85;
     text-align: center;
 }
@@ -61,7 +57,7 @@ body {
 }
 
 .main-container {
-    padding-top: 12vh;
+    padding-top: 5vh;
     display: flex;
     width: 100%;
     max-width: 1200px;
