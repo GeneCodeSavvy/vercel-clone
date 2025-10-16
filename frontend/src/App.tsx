@@ -127,7 +127,7 @@ function App() {
                                     value={gitUrl}
                                     onChange={(e) => setGitUrl(e.target.value)}
                                     placeholder="Enter git URL"
-                                    className="input  "
+                                    className="input"
                                     disabled={isLoading}
                                 />
                             </div>
@@ -146,8 +146,9 @@ function App() {
                             </div>
 
                             <div className='input-container'>
-                                <label htmlFor="git-url">Build Directory </label>
+                                <label htmlFor="build-dir">Build Directory </label>
                                 <input
+                                    id="build-dir"
                                     type="text"
                                     value={buildDir}
                                     onChange={(e) => setBuildDir(e.target.value)}
@@ -157,8 +158,9 @@ function App() {
                                 />
                             </div>
                             <div className='input-container'>
-                                <label htmlFor="git-url">Build command</label>
+                                <label htmlFor="build-cmd">Build command</label>
                                 <input
+                                    id="build-cmd"
                                     type="text"
                                     value={buildCommand}
                                     onChange={(e) => setBuildCommand(e.target.value)}
@@ -195,6 +197,13 @@ function App() {
                                         type='button'
                                     >
                                         {copySuccess || 'Copy'}
+                                    </button>
+                                    <button
+                                        onClick={() => window.open(projectUrl, '_blank', 'noopener,noreferrer')}
+                                        className="visit-button"
+                                        type='button'
+                                    >
+                                        Visit
                                     </button>
                                 </div>
                                 {copySuccess && (
