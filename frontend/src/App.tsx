@@ -50,6 +50,13 @@ function App() {
         }
     }, [logs]);
 
+    useEffect(() => {
+        if (status === 'The project is hosted' || status.startsWith('Error')) {
+            setIsLoading(false);
+        }
+    }, [status]);
+
+
     const copyToClipboard = async (text: string) => {
         try {
             await navigator.clipboard.writeText(text);
@@ -68,7 +75,7 @@ function App() {
 
         setIsLoading(true);
         setStatus('Creating project...');
-        if (logs) { setLogs([]) };
+        setLogs([]);
         setProjectURL('');
 
         let repositoryUrl = gitUrl.trim();
@@ -100,7 +107,6 @@ function App() {
         } catch (error) {
             console.error('Error creating project:', error);
             setStatus('Error creating project. Please try again.');
-        } finally {
             setIsLoading(false);
         }
     };
@@ -174,7 +180,13 @@ function App() {
                                 className="submit-button"
                                 disabled={isLoading || !gitUrl.trim()}
                             >
-                                Deploy →
+                                {isLoading ? (
+                                    <div className="loader-container">
+                                        <div className="loader"></div>
+                                    </div>
+                                ) : (
+                                    'Deploy →'
+                                )}
                             </button>
                         </form>
                     </div>

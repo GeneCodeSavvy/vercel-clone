@@ -276,6 +276,33 @@ body {
     background: rgba(255, 255, 255, 0.15);
 }
 
+.submit-button .loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.loader {
+    width: 24px;
+    /* Size of the spinner */
+    height: 24px;
+    /* Size of the spinner */
+    border: 3px solid rgba(0, 0, 0, 0.2);
+    /* Light part of the circle */
+    border-left-color: #000000;
+    /* Dark part that spins */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 @media (max-width: 768px) {
     .main-container {
         flex-direction: column;
