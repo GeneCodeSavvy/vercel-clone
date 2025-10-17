@@ -12,7 +12,9 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
+const CLONE_COMMAND = `git clone "${process.env.GIT_REPOSITORY__URL}" /home/app/output/`
 const PROJECT_ID = process.env.PROJECT_ID
+const REDIS_CLIENT = process.env.REDIS_CLIENT
 const BUILD_DIR = process.env.BUILD_DIR || 'dist'
 const ROOT_DIR = process.env.ROOT_DIR || '.'
 const BUILD_COMMAND = process.env.BUILD_COMMAND || 'npm run build'
@@ -21,7 +23,7 @@ let publisher
 let s3Client
 
 try {
-    publisher = createClient({ url: process.env.REDIS_CLIENT, })
+    publisher = createClient({ url: REDIS_CLIENT })
     await publisher.connect()
 
     s3Client = new S3Client({ region: 'ap-southeast-2' })
@@ -44,7 +46,7 @@ async function init() {
     const outDirPath = path.join(__dirname, 'output')
     const rootDirPath = ROOT_DIR ? path.join(outDirPath, ROOT_DIR) : outDirPath
 
-    const p = exec(`cd ${rootDirPath} && npm install && ${BUILD_COMMAND}`)
+    const p = exec(`${CLONE_COMMAND} && cd ${rootDirPath} && npm install && ${BUILD_COMMAND}`)
 
     p.stdout.on('data', function(data) {
         console.log(data.toString())
@@ -53,36 +55,41 @@ async function init() {
 
     p.on('error', function(data) {
         console.log('Error', data.toString())
-        publishLog(`error: ${data.toString()}`)
+        publishLog(`Error: ${data.toString()}`)
     })
 
     p.on('close', async function() {
         console.log('Build Complete')
         publishLog(`Build Complete`)
-        const distFolderPath = path.join(rootDirPath, BUILD_DIR)
-        const distFolderContents = fs.readdirSync(distFolderPath, { recursive: true })
 
-        publishLog(`Starting to upload`)
-        for (const file of distFolderContents) {
-            const filePath = path.join(distFolderPath, file)
-            if (fs.lstatSync(filePath).isDirectory()) continue;
+        try {
+            const distFolderPath = path.join(rootDirPath, BUILD_DIR)
+            const distFolderContents = fs.readdirSync(distFolderPath, { recursive: true })
 
-            console.log('uploading', filePath)
-            publishLog(`uploading ${file}`)
+            publishLog(`Starting to upload`)
+            for (const file of distFolderContents) {
+                const filePath = path.join(distFolderPath, file)
+                if (fs.lstatSync(filePath).isDirectory()) continue;
 
-            const command = new PutObjectCommand({
-                Bucket: 'vercel-clone-builder',
-                Key: `__outputs/${PROJECT_ID}/${file}`,
-                Body: fs.createReadStream(filePath),
-                ContentType: mime.lookup(filePath)
-            })
+                console.log('uploading', filePath)
+                publishLog(`uploading ${file}`)
 
-            await s3Client.send(command)
-            publishLog(`uploaded ${file}`)
-            console.log('uploaded', filePath)
+                const command = new PutObjectCommand({
+                    Bucket: 'vercel-clone-builder',
+                    Key: `__outputs/${PROJECT_ID}/${file}`,
+                    Body: fs.createReadStream(filePath),
+                    ContentType: mime.lookup(filePath)
+                })
+
+                await s3Client.send(command)
+                publishLog(`uploaded ${file}`)
+                console.log('uploaded', filePath)
+            }
+            publishLog(`Done`)
+            console.log('Done...')
+        } catch (error) {
+            publishLog(`Error : ${error}`)
         }
-        publishLog(`Done`)
-        console.log('Done...')
 
         try {
             await publisher.quit();

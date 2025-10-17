@@ -83,6 +83,10 @@ app.post('/project', async (req, res) => {
                             value: project_id,
                         },
                         {
+                            name: "REDIS_CLIENT",
+                            value: REDIS_CLIENT
+                        },
+                        {
                             name: "BUILD_DIR",
                             value: buildDir,
                         },
