@@ -223,11 +223,6 @@ function App() {
                                     </button>
                                 </div>
                             </div>
-                            {copySuccess && (
-                                <div className="copy-feedback">
-                                    {copySuccess}
-                                </div>
-                            )}
                         </div>
                     </div>
                 </div>
