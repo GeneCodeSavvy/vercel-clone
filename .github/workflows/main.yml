@@ -39,10 +39,10 @@ jobs:
 
             npm run install:all || { echo "Error: Failed to run npm install"; exit 1; }
 
-            if which pm2 !> /dev/null; then
-              echo "PM2 app not found. Installing PM2"
+            if ! which pm2 > /dev/null; then
+              echo "PM2 not found. Installing PM2 globally."
               npm install -g pm2
-            if
+            fi
 
             if pm2 describe $APP_NAME > /dev/null; then
               echo "PM2 app $APP_NAME found. Reloading..."
