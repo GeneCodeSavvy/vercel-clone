@@ -105,8 +105,12 @@ function App() {
                 }
             }
         } catch (error) {
-            console.error('Error creating project:', error);
-            setStatus('Error creating project. Please try again.');
+            if (axios.isAxiosError(error) && error.response && error.response.status === 429) {
+                setStatus('Error: Quota Completed of 10 Projects')
+            } else {
+                console.error('Error creating project:', error);
+                setStatus('Error creating project. Please try again.');
+            }
             setIsLoading(false);
         }
     };
