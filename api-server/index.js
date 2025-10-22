@@ -13,7 +13,8 @@ const app = express()
 const server = createServer(app)
 const wss = new WebSocketServer({ server })
 
-const REDIS_CLIENT = process.env.REDIS_CLIENT
+const REDIS_CLIENT_AWS = process.env.REDIS_CLIENT_AWS
+const REDIS_CLIENT_ORACLE = process.env.REDIS_CLIENT_ORACLE
 const ECS_CLIENT_ACCESS_ID = process.env.ECS_CLIENT_ACCESS_ID
 const ECS_CLIENT_SECRET_ACCESS_ID = process.env.ECS_CLIENT_SECRET_ACCESS_ID
 const TASK_ARN = process.env.TASK_ARN
@@ -24,7 +25,7 @@ const SUBNET_ID = process.env.SUBNET_ID.split(',')
 const SECURITY_GROUP_ID = process.env.SECURITY_GROUP_ID
 const CONTAINER_NAME = process.env.CONTAINER_NAME
 
-const subscriber = createClient({ url: REDIS_CLIENT })
+const subscriber = createClient({ url: REDIS_CLIENT_ORACLE })
 const ecsClient = new ECSClient({
     region: 'ap-southeast-2',
     credentials: {
@@ -84,7 +85,7 @@ app.post('/project', async (req, res) => {
                         },
                         {
                             name: "REDIS_CLIENT",
-                            value: REDIS_CLIENT
+                            value: REDIS_CLIENT_AWS
                         },
                         {
                             name: "BUILD_DIR",
