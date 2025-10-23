@@ -118,7 +118,7 @@ function App() {
     return (
         <div className="app">
             <div className="header">
-                <h1 style={{ color: 'white', fontSize: '25px' }}>Verceless by <a style={{ textDecoration: 'none' }} href="https://x.com/intent/follow?screen_name=harsh_twtt" target='_blank' rel='noopener'>@harsh_twtt</a></h1>
+                <h1 style={{ color: 'white', fontSize: '25px' }}>VerceLESS by <a style={{ textDecoration: 'none' }} href="https://x.com/intent/follow?screen_name=harsh_twtt" target='_blank' rel='noopener'>@harsh_twtt</a></h1>
             </div>
 
             <div className="main-container">
