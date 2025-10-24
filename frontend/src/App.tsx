@@ -45,8 +45,14 @@ function App() {
         if (logsRef.current) {
             logsRef.current.scrollTop = logsRef.current.scrollHeight;
         }
-        if (logs[logs.length - 1] === 'Done') {
+        const lastLog = logs[logs.length - 1];
+        if (lastLog === 'Done') {
             setStatus('The project is hosted');
+        } else if (lastLog?.startsWith('Error')) {
+            setStatus('Build failed. Check the logs for details.');
+            setIsLoading(false);
+        } else if (lastLog?.includes("Error : Error: ENOENT: no such file or directory")) {
+            setStatus('Build failed. Fill the form with valid details')
         }
     }, [logs]);
 
