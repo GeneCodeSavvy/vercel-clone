@@ -51,7 +51,7 @@ function App() {
         } else if (lastLog?.startsWith('Error')) {
             setStatus('Build failed. Check the logs for details.');
             setIsLoading(false);
-        } else if (lastLog?.includes("Error : Error: ENOENT: no such file or directory")) {
+        } else if (lastLog?.includes("ENOENT: no such file or directory")) {
             setStatus('Build failed. Fill the form with valid details')
         }
     }, [logs]);
