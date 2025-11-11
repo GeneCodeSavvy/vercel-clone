@@ -49,6 +49,11 @@ app.use(cors(corsOptions))
 
 app.post('/project', async (req, res) => {
     try {
+
+        if (!subscriber.isOpen) {
+            subscriber.connect()
+        }
+
         const { gitURL, buildDir, rootDir, buildCommand } = req.body;
 
         if (!gitURL) {
