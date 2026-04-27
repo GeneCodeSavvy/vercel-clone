@@ -53,6 +53,7 @@ function App() {
             setIsLoading(false);
         } else if (lastLog?.includes("ENOENT: no such file or directory")) {
             setStatus('Build failed. Fill the form with valid details')
+
         }
     }, [logs]);
 
