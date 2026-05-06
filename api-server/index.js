@@ -190,4 +190,3 @@ init()
 server.listen(PORT, () => {
     console.log(`HTTP server and WebSocket server listening on port: ${PORT}`)
 })
-
